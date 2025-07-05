@@ -22,6 +22,6 @@ jobs:
       - uses: android-actions/setup-android@v3
 
       - name: Build & publish to GitHub Packages
-        run: ./gradlew :sigma-sdk:publish               # :module имя поменяем чуть ниже
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     # выдаётся GitHub-ом автоматически
+        uses: gradle/gradle-build-action@v2   # ← action сам ставит Gradle
+        with:
+          arguments: ":sigma-sdk:publish"
