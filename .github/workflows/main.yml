@@ -2,26 +2,36 @@ name: Publish Sigma SDK
 
 on:
   push:
-    tags: ["v*.*.*"]          # запустится, когда запушишь тег v1.0.0
-  workflow_dispatch:
+    tags:
+      - 'v*.*.*'          # запустится, когда запушишь тег v1.0.0
+  workflow_dispatch:      # можно стартовать вручную из UI
+
+# даём токену права на публикацию пакетов
+permissions:
+  contents: read          # нужно для checkout
+  packages: write         # нужно для GitHub Packages
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout sources
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-java@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
           cache: gradle
 
-      # скачивает Android SDK и инструментальную цепочку
-      - uses: android-actions/setup-android@v3
+      # Ставим Android SDK/Build-tools (без него .aar не соберётся)
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
 
+      # Сборка и публикация .aar в GitHub Packages
       - name: Build & publish to GitHub Packages
-        uses: gradle/gradle-build-action@v2   # ← action сам ставит Gradle
+        uses: gradle/gradle-build-action@v2   # action сам ставит Gradle
         with:
-          arguments: ":sigma-sdk:publish"
+          arguments: ":sigma-sdk:publish"     # тянет задачу из модуля SDK
