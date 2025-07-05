@@ -10,22 +10,18 @@ android {
 
     defaultConfig {
         minSdk = 21
-        // targetSdk параметр устарел — убираем
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    // ⬇  Java 17 для Java-кода и kapt/annotation-processors
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    // ⬇  Kotlin-toolchain 17, чтобы jvmTarget совпадал с Java
     kotlin {
         jvmToolchain(17)
     }
 
-    // публикуем только release-вариант + sources
     publishing {
         singleVariant("release") {
             withSourcesJar()
@@ -33,7 +29,6 @@ android {
     }
 }
 
-// публикация .aar в GitHub Packages
 afterEvaluate {
     publishing {
         publications.create<MavenPublication>("release") {
@@ -53,4 +48,9 @@ afterEvaluate {
             }
         }
     }
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
 }
