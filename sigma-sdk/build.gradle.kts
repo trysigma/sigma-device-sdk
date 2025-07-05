@@ -7,22 +7,25 @@ plugins {
 android {
     namespace = "com.sigma.sdk"
     compileSdk = 34
+
     defaultConfig {
         minSdk = 21
-        targetSdk = 34          // warning-депрекейт — сейчас не критично
+        // targetSdk параметр устарел — убираем
         consumerProguardFiles("consumer-rules.pro")
     }
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
+
+    // ⬇  Java 17 для Java-кода и kapt/annotation-processors
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
-    // ⬇️ говорим AGP, что публикуем только variant release + sources
+    // ⬇  Kotlin-toolchain 17, чтобы jvmTarget совпадал с Java
+    kotlin {
+        jvmToolchain(17)
+    }
+
+    // публикуем только release-вариант + sources
     publishing {
         singleVariant("release") {
             withSourcesJar()
@@ -30,10 +33,11 @@ android {
     }
 }
 
+// публикация .aar в GitHub Packages
 afterEvaluate {
     publishing {
         publications.create<MavenPublication>("release") {
-            from(components["release"])      // теперь component уже существует
+            from(components["release"])
             groupId    = "com.sigma"
             artifactId = "sdk"
             version    = "1.0.0"
