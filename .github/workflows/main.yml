@@ -2,26 +2,21 @@ name: Publish Sigma SDK
 
 on:
   push:
-    tags:
-      - 'v*.*.*'            # запустится при пуше тега v1.0.0, v1.2.3 …
-  workflow_dispatch:         # можно стартовать вручную из вкладки Actions
+    tags: ['v*.*.*']          # сборка при пуше тега v1.0.0, v1.1.0 …
+  workflow_dispatch:          # можно стартовать вручную из UI
 
-# встроенный GITHUB_TOKEN нужен только на чтение;
-# запись в Packages выполняем через наш PAT
-permissions:
+permissions:                 # встроенный токен лишь читает репо
   contents: read
-  packages: write
+  packages: write             # нужен Gradle-action’у (но писать будет PAT)
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1 ─ исходники репозитория
       - name: Checkout sources
         uses: actions/checkout@v4
 
-      # 2 ─ JDK 17 + кэш gradle-модулей
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -29,24 +24,19 @@ jobs:
           java-version: 17
           cache: gradle
 
-      # 3 ─ Android SDK / build-tools
       - name: Install Android SDK
         uses: android-actions/setup-android@v3
 
-      # 4 ─ Gradle 8.7 без wrapper-скриптов
       - name: Set up Gradle 8.7
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: 8.7
 
-      # 5 ─ Сборка .aar и публикация в GitHub Packages
+      # PAT — единственное, что потребуется для публикации пакета
       - name: Build & publish to GitHub Packages
         env:
-          GPR_USER: ${{ github.actor }}            # ваш логин
-          GPR_KEY:  ${{ secrets.GH_PACKAGES_PAT }} # PAT с write:packages
+          GPR_USER: ${{ github.actor }}        # ваш логин
+          GPR_KEY:  ${{ secrets.GH_PACKAGES_PAT }}
         run: |
           echo "⏩ Publishing as $GPR_USER"
-          gradle \
-            -Pgpr.user=$GPR_USER \
-            -Pgpr.key=$GPR_KEY \
-            :sigma-sdk:publish
+          gradle -Pgpr.user=$GPR_USER -Pgpr.key=$GPR_KEY :sigma-sdk:publish
