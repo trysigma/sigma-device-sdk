@@ -1,0 +1,27 @@
+name: Publish Sigma SDK
+
+on:
+  push:
+    tags: ["v*.*.*"]          # запустится, когда запушишь тег v1.0.0
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      # скачивает Android SDK и инструментальную цепочку
+      - uses: android-actions/setup-android@v3
+
+      - name: Build & publish to GitHub Packages
+        run: ./gradlew :sigma-sdk:publish               # :module имя поменяем чуть ниже
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}     # выдаётся GitHub-ом автоматически
