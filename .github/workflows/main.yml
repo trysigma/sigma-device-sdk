@@ -3,10 +3,9 @@ name: Publish Sigma SDK
 on:
   push:
     tags:
-      - 'v*.*.*'          # запустится, когда пушишь тег v1.0.0, v1.1.3 и т.п.
-  workflow_dispatch:       # позволяет запускать вручную из Actions UI
+      - 'v*.*.*'          # v1.0.0, v1.1.3 …
+  workflow_dispatch:
 
-# минимально нужные права токена GITHUB_TOKEN
 permissions:
   contents: read
   packages: write
@@ -16,24 +15,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Клонируем исходники репозитория
-      - name: Checkout sources
-        uses: actions/checkout@v4
+      # 1. Клонируем репозиторий
+      - uses: actions/checkout@v4
 
-      # 2. Устанавливаем JDK 21 (Temurin) + кэш Gradle
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      # 2. Ставим JDK 21 (Temurin) + кэш Gradle
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
           cache: gradle
 
-      # 3. Ставим Android SDK и build-tools
-      - name: Install Android SDK
-        uses: android-actions/setup-android@v3
+      # 3. Подтягиваем Android SDK / build-tools
+      - uses: android-actions/setup-android@v3
 
-      # 4. Собираем .aar и публикуем в GitHub Packages
-      - name: Build & publish to GitHub Packages
-        uses: gradle/gradle-build-action@v2   # action сам подтянет Gradle
+      # 4. Ставим Gradle 8.7 (или нужную вам версию) — без wrapper
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
         with:
-          arguments: ":sigma-sdk:publish"     # задача публикации модуля SDK
+          gradle-version: 8.7          # зафиксированная версия
+
+      # 5. Собираем .aar и публикуем в GitHub Packages
+      - name: Build & publish to GitHub Packages
+        run: gradle :sigma-sdk:publish   # ⚠️ вызываем gradle, а НЕ ./gradlew
