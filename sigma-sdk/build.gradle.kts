@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         minSdk = 21
-@@ -17,15 +17,10 @@ android {
+android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -27,7 +27,7 @@ android {
     }
 }
 
-@@ -42,8 +37,8 @@ afterEvaluate {
+afterEvaluate {
                 name = "GitHub"
                 url  = uri("https://maven.pkg.github.com/trysigma/sigma-device-sdk")
                 credentials {
