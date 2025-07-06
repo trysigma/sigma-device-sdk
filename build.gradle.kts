@@ -1,27 +1,5 @@
-
-// build.gradle.kts (корневой скрипт для публикации)
 plugins {
-    `maven-publish`
-}
-
-group = "com.trysigma"
-version = "1.0.0"
-
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-            from(components["release"])
-            artifactId = "sigma-sdk"
-        }
-    }
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/trysigma/sigma-device-sdk")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR") ?: "Kazymbetov"
-                password = System.getenv("GITHUB_TOKEN") ?: "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"
-            }
-        }
-    }
+    id("com.android.library")       apply false   // версии уже заданы выше
+    id("com.android.library")      apply false
+    id("org.jetbrains.kotlin.android") apply false
 }
