@@ -1,14 +1,23 @@
+// settings.gradle.kts (корень репозитория sigma-device-sdk)
 pluginManagement {
-    repositories { google(); mavenCentral() }
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
     plugins {
-        id("com.android.library")           version "8.4.1"
-        id("org.jetbrains.kotlin.android")  version "1.9.24"
+        id("com.android.library") version "8.4.1"
+        id("org.jetbrains.kotlin.android") version "1.9.24"
+        id("maven-publish")          version "1.0"
     }
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories { google(); mavenCentral() }
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
 
 rootProject.name = "sigma-device-sdk"
