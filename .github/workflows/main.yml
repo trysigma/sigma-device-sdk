@@ -37,6 +37,7 @@ jobs:
         env:
           GPR_USER: ${{ github.actor }}        # ваш логин
           GPR_KEY:  ${{ secrets.GH_PACKAGES_PAT }}
+          GH_PACKAGES_PAT: ${{ secrets.GH_PACKAGES_PAT }} 
         run: |
           echo "⏩ Publishing as $GPR_USER"
           gradle -Pgpr.user=$GPR_USER -Pgpr.key=$GPR_KEY :sigma-sdk:publish
