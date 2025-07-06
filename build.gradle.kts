@@ -1,3 +1,4 @@
+
 // build.gradle.kts (корневой, для публикации)
 plugins {
     `maven-publish`
@@ -9,7 +10,8 @@ version = "1.0.0"
 publishing {
     publications {
         create<MavenPublication>("release") {
-            from(components["release"])
+            // Используем компонент 'androidRelease' для Android Library
+            from(components["androidRelease"])
             artifactId = "sigma-sdk"
         }
     }
