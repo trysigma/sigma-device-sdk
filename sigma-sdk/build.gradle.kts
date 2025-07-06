@@ -1,51 +1,32 @@
+// sigma-sdk/build.gradle.kts (модуль SDK)
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    `maven-publish`
+    kotlin("android")
 }
 
 android {
-    namespace   = "com.sigma.sdk"
-    compileSdk  = 34
-
+    namespace = "com.trysigma.sigma"
+    compileSdk = 33
     defaultConfig {
         minSdk = 21
+        targetSdk = 33
         consumerProguardFiles("consumer-rules.pro")
     }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlin { jvmToolchain(17) }
-
-    publishing {
-        singleVariant("release") { withSourcesJar() }
-    }
-}
-
-afterEvaluate {
-    publishing {
-        publications.create<MavenPublication>("release") {
-            from(components["release"])
-            groupId    = "com.sigma"
-            artifactId = "sdk"
-            version    = "1.0.0"
-        }
-        repositories {
-            maven {
-                name = "GitHub"
-                url  = uri("https://maven.pkg.github.com/trysigma/sigma-device-sdk")
-                credentials {
-                    username = findProperty("gpr.user")!!.toString()
-                    password = findProperty("gpr.key")!!.toString()
-                }
-            }
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.moshi:moshi:1.15.1")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
+    // Добавьте другие зависимости SDK при необходимости
 }
