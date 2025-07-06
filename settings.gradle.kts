@@ -1,4 +1,4 @@
-// settings.gradle.kts (корень репозитория sigma-device-sdk)
+// settings.gradle.kts (root of sigma-device-sdk repository)
 pluginManagement {
     repositories {
         gradlePluginPortal()
