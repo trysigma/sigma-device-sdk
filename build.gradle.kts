@@ -1,7 +1,4 @@
-plugins {
-    id("com.android.library")      apply false
-    id("org.jetbrains.kotlin.android") apply false
-}
+
 // sigma-device-sdk/build.gradle.kts (корень SDK-репо)
 plugins {
   id("com.android.library")      version "7.2.2" apply false  // ваша версия AGP
