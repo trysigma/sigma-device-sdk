@@ -19,7 +19,7 @@ publishing {
             url = uri("https://maven.pkg.github.com/trysigma/sigma-device-sdk")
             credentials {
                 username = System.getenv("GITHUB_ACTOR") ?: "Kazymbetov"
-                password = System.getenv("GITHUB_TOKEN") ?: "Vfnfy2194"
+                password = System.getenv("GITHUB_TOKEN") ?: "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"
             }
         }
     }
