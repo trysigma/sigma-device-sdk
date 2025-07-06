@@ -44,7 +44,7 @@ afterEvaluate {
                 url = uri("https://maven.pkg.github.com/trysigma/sigma-device-sdk")
                 credentials {
                     username = System.getenv("GPR_USER") ?: error("Missing GPR_USER")
-                    password = System.getenv("GH_PACKAGES_PAT_2") ?: error("Missing GH_PACKAGES_PAT_2")
+                    password = System.getenv("GH_PACKAGES_PAT") ?: error("Missing GH_PACKAGES_PAT")
                 }
             }
         }
