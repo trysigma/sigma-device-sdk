@@ -37,8 +37,8 @@ afterEvaluate {
                 name = "GitHub"
                 url  = uri("https://maven.pkg.github.com/trysigma/sigma-device-sdk")
                 credentials {
-                    username = findProperty("gpr.user")!!.toString()
-                    password = findProperty("gpr.key")!!.toString()
+                    username = System.getenv("GPR_USER") ?: error("Missing GPR_USER")
+                    password = System.getenv("GPR_KEY") ?: error("Missing GPR_KEY")
                 }
             }
         }
