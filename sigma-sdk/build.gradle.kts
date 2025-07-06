@@ -1,53 +1,40 @@
-// sigma-sdk/build.gradle.kts (SDK module)
 plugins {
-    id("com.android.library")
-    kotlin("android")
-    `maven-publish`
 }
 
 android {
-    namespace = "com.trysigma.sigma"
-    compileSdk = 33
+    namespace = "com.sigma.sdk"
+    compileSdk = 34
+    namespace   = "com.sigma.sdk"
+    compileSdk  = 34
+
     defaultConfig {
         minSdk = 21
-        targetSdk = 33
-        consumerProguardFiles("consumer-rules.pro")
+@@ -17,15 +17,10 @@ android {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "consumer-rules.pro"
-            )
+
+    kotlin {
+        jvmToolchain(17)
+    }
+    kotlin { jvmToolchain(17) }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
         }
+        singleVariant("release") { withSourcesJar() }
     }
 }
 
-dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.moshi:moshi:1.15.1")
-    implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-            afterEvaluate {
-                from(components["release"])
-            }
-            artifactId = "sigma-sdk"
-        }
-    }
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/trysigma/sigma-device-sdk")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR") ?: ""
-                password = System.getenv("GITHUB_TOKEN") ?: ""
+@@ -42,8 +37,8 @@ afterEvaluate {
+                name = "GitHub"
+                url  = uri("https://maven.pkg.github.com/trysigma/sigma-device-sdk")
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                    username = findProperty("gpr.user")!!.toString()
+                    password = findProperty("gpr.key")!!.toString()
+                }
             }
         }
-    }
-}
