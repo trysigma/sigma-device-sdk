@@ -1,43 +1,51 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("maven-publish")
+    `maven-publish`
 }
 
 android {
-    namespace = "com.sigma.sdk"
-    compileSdk = 34
     namespace   = "com.sigma.sdk"
     compileSdk  = 34
 
     defaultConfig {
         minSdk = 21
-android {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        consumerProguardFiles("consumer-rules.pro")
     }
 
-    kotlin {
-        jvmToolchain(17)
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlin { jvmToolchain(17) }
 
     publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
         singleVariant("release") { withSourcesJar() }
     }
 }
 
 afterEvaluate {
+    publishing {
+        publications.create<MavenPublication>("release") {
+            from(components["release"])
+            groupId    = "com.sigma"
+            artifactId = "sdk"
+            version    = "1.0.0"
+        }
+        repositories {
+            maven {
                 name = "GitHub"
                 url  = uri("https://maven.pkg.github.com/trysigma/sigma-device-sdk")
                 credentials {
-                    username = System.getenv("GITHUB_ACTOR")
-                    password = System.getenv("GITHUB_TOKEN")
                     username = findProperty("gpr.user")!!.toString()
                     password = findProperty("gpr.key")!!.toString()
                 }
             }
         }
+    }
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+}
