@@ -2,12 +2,12 @@ name: Publish Sigma SDK
 
 on:
   push:
-    tags: ['v*.*.*']          # сборка при пуше тега v1.0.0, v1.1.0 …
-  workflow_dispatch:          # можно стартовать вручную из UI
+    tags: ['v*.*.*']          # Пример: v1.0.0, v1.1.0
+  workflow_dispatch:          # Ручной запуск из GitHub UI
 
-permissions:                 # встроенный токен лишь читает репо
+permissions:
   contents: read
-  packages: write             # нужен Gradle-action’у (но писать будет PAT)
+  packages: write
 
 jobs:
   build:
@@ -32,11 +32,10 @@ jobs:
         with:
           gradle-version: 8.7
 
-      # PAT — единственное, что потребуется для публикации пакета
       - name: Build & publish to GitHub Packages
         env:
           GPR_USER: Kazymbetov
           GH_PACKAGES_PAT_2: ${{ secrets.GH_PACKAGES_PAT_2 }}
         run: |
           echo "⏩ Publishing as $GPR_USER"
-          gradle -Pgpr.user=$GPR_USER -Pgpr.key=$GPR_KEY :sigma-sdk:publish
+          ./gradlew :sigma-sdk:publish
