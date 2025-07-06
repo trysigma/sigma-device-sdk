@@ -1,7 +1,8 @@
-// sigma-sdk/build.gradle.kts (модуль SDK)
+// sigma-sdk/build.gradle.kts (SDK module)
 plugins {
     id("com.android.library")
     kotlin("android")
+    `maven-publish`
 }
 
 android {
@@ -28,5 +29,25 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.moshi:moshi:1.15.1")
     implementation("com.squareup.moshi:moshi-kotlin:1.15.1")
-    // другие зависимости SDK при необходимости
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            afterEvaluate {
+                from(components["release"])
+            }
+            artifactId = "sigma-sdk"
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/trysigma/sigma-device-sdk")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR") ?: ""
+                password = System.getenv("GITHUB_TOKEN") ?: ""
+            }
+        }
+    }
 }
