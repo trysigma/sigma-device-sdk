@@ -35,8 +35,8 @@ jobs:
       # PAT — единственное, что потребуется для публикации пакета
       - name: Build & publish to GitHub Packages
         env:
-          GPR_USER: ${{ github.actor }}        # ваш логин
-          GPR_KEY:  ${{ secrets.GH_PACKAGES_PAT_2 }}
+          GPR_USER: Kazymbetov
+          GH_PACKAGES_PAT_2: ${{ secrets.GH_PACKAGES_PAT_2 }}
         run: |
           echo "⏩ Publishing as $GPR_USER"
           gradle -Pgpr.user=$GPR_USER -Pgpr.key=$GPR_KEY :sigma-sdk:publish
