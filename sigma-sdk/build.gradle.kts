@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sigma.sdk"
+    namespace = "com.example.sigmademo"
     compileSdk = 34
 
     defaultConfig {
