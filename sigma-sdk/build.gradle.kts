@@ -35,7 +35,7 @@ afterEvaluate {
             from(components["release"])
             groupId = "com.sigma"
             artifactId = "sdk"
-            version = "1.0.1"
+            version = "1.0.2"
         }
 
         repositories {
