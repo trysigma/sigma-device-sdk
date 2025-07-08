@@ -1,27 +1,14 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    <!-- ✅ Разрешение для Android 11+ -->
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- ✅ Разрешение для доступа в интернет -->
+    <!-- Разрешения (опционально, можно оставить) -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- ✅ queries, чтобы указать, что ты хочешь видеть все пакеты -->
+    <!-- Для доступа к installed apps -->
     <queries>
         <package android:name="*" />
     </queries>
 
-    <application
-        android:allowBackup="true"
-        android:label="SigmaDemo"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.SigmaDemo">
-
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-    </application>
+    <!-- Пустой <application> обязателен даже в библиотеке -->
+    <application />
 </manifest>
